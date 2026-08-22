@@ -1,0 +1,42 @@
+#inter-pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: server-pod
+  labels:
+  app: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: client-pod
+spec:
+  containers:
+  - name: client
+    image: curlimages/curl:latest
+    command:
+    - sleep 
+    - "3600"
+
+---      
+
+apiVersion: v1
+kind: service
+metadata: 
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+ports:
+  port: 80
+  targetPort: 80
+
+---
