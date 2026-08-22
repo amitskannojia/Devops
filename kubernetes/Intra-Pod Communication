@@ -1,0 +1,18 @@
+#intra-pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: intra-pod
+specs:
+  containers:
+  - name: web
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+
+
+  - name: client
+    image: curlimages/curl:latest
+    command:
+    - sleep 
+      "3600"
