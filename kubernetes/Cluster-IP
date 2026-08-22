@@ -1,0 +1,30 @@
+#ClusterIP
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+  labels:
+    app: my-app
+specs:
+  containers:
+   -name: con1
+    image: nginx
+    ports:
+    -containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-svc
+  specs:
+    selector:
+      app: my-app
+    type: ClusterIP
+  ports:
+    -port: 80
+     targetPort:80
+
+
+---
