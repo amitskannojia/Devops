@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: intra-pod
-specs:
+spec:
   containers:
   - name: web
     image: nginx:latest
@@ -15,4 +15,4 @@ specs:
     image: curlimages/curl:latest
     command:
     - sleep 
-        "3600"
+    - "3600"
