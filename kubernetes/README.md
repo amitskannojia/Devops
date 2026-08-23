@@ -1,6 +1,6 @@
 #Installation for Kubernetes:
 
-#Install eksctl-
+#Install eksctl-  
 
 eksctl is a simple CLI tool for creating and managing Kubernetes clusters on Amazon EKS.
 
