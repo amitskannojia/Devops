@@ -7,7 +7,7 @@ specs:
   containers:
   - name: web
     image: nginx:latest
-    ports:
+  ports:
     - containerPort: 80
 
 
@@ -15,4 +15,4 @@ specs:
     image: curlimages/curl:latest
     command:
     - sleep 
-      "3600"
+        "3600"
