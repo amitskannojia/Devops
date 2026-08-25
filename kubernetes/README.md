@@ -54,13 +54,7 @@ aws sts get-caller-identity
 
 #Create EKS
 
-eksctl create cluster \
-  --name my-eks-cluster \
-  --region ap-south-1 \
-  --version 1.35 \
-  --nodegroup-name my-nodes \
-  --node-type t3.medium \
-  --nodes 2
+eksctl create cluster --name my-eks-cluster --region ap-south-1 --version 1.35 --nodegroup-name my-nodes --node-type t3.medium --nodes 2
   
 #Configure kubectl
 
@@ -75,8 +69,6 @@ kubectl get pods -A
 kubectl cluster-info
 
 Delete
-eksctl delete cluster \
-  --name my-eks-cluster \
-  --region ap-south-1
+eksctl delete cluster --name my-eks-cluster --region ap-south-1
 
 
