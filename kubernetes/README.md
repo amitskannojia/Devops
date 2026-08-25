@@ -6,9 +6,7 @@ sudo apt install -y curl tar unzip git
 
 #eksctl
 
-curl --silent --location \
-"https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" \
---output /tmp/eksctl.tar.gz
+curl --silent --location "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" --output /tmp/eksctl.tar.gz
 
 tar -xzf /tmp/eksctl.tar.gz -C /tmp
 
@@ -58,9 +56,7 @@ eksctl create cluster --name my-eks-cluster --region ap-south-1 --version 1.35 -
   
 #Configure kubectl
 
-aws eks update-kubeconfig \
-  --region ap-south-1 \
-  --name my-eks-cluster
+aws eks update-kubeconfig --region ap-south-1 --name my-eks-cluster
   
 #Verify
 
@@ -68,7 +64,8 @@ kubectl get nodes
 kubectl get pods -A
 kubectl cluster-info
 
-Delete
+#Delete
+
 eksctl delete cluster --name my-eks-cluster --region ap-south-1
 
 
