@@ -1,54 +1,52 @@
 #Installation for Kubernetes:
 
-#Install eksctl-  
+sudo apt update -y
+sudo apt install -y curl tar unzip git
+eksctl
+curl --silent --location \
+"https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" \
+--output /tmp/eksctl.tar.gz
 
-eksctl is a simple CLI tool for creating and managing Kubernetes clusters on Amazon EKS.
+tar -xzf /tmp/eksctl.tar.gz -C /tmp
 
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-sudo mv /tmp/eksctl /usr/local/bin
+sudo mv /tmp/eksctl /usr/local/bin/eksctl
 
-# Verify installation-
+sudo chmod +x /usr/local/bin/eksctl
 
 eksctl version
 
-#Install kubectl-
-
-Download kubectl-
-
+kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
 
-#Verify kubectl-
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
 
 echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
 
-#Install kubectl-
-
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-
-# Alternatively, install in local directory
-
-chmod +x kubectl
-mkdir -p ~/.local/bin
-mv ./kubectl ~/.local/bin/kubectl
-
-# Verify installation
 
 kubectl version --client
 
-#Download and Install AWS CLI-
+rm -f kubectl kubectl.sha256
 
-sudo apt install unzip -y
+AWS CLI
+sudo apt install -y unzip curl
+
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
+
+unzip -q awscliv2.zip
+
 sudo ./aws/install
 
-#Configure AWS CLI-
+aws --version
 
+rm -rf aws awscliv2.zip
+
+Configure AWS
 aws configure
+Verify AWS
+aws sts get-caller-identity
 
-#Create an EKS Cluster-
-
+Create EKS
 eksctl create cluster \
   --name my-eks-cluster \
   --region ap-south-1 \
@@ -56,13 +54,20 @@ eksctl create cluster \
   --nodegroup-name my-nodes \
   --node-type t3.medium \
   --nodes 2
-
-  #Update kubeconfig-
   
-  aws eks update-kubeconfig --name my-eks-cluster
-
-  #Delete the EKS Cluster-
+Configure kubectl
+aws eks update-kubeconfig \
+  --region ap-south-1 \
+  --name my-eks-cluster
   
-  eksctl delete cluster --name my-eks-cluster --region ap-south-1
+Verify
+kubectl get nodes
+kubectl get pods -A
+kubectl cluster-info
+
+Delete
+eksctl delete cluster \
+  --name my-eks-cluster \
+  --region ap-south-1
 
 
