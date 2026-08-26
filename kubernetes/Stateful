@@ -1,0 +1,47 @@
+#Stateful-Service
+apiversion: v1
+kind: Service
+metadata:
+  name: my-svc
+spec:
+  clusterIP: None
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+
+---
+
+#Stateful-pod
+apiversion: apps/v1
+kind: StatefulSet
+metadata:
+  name: stateful-nginx
+spec:
+  serviceName: my-svc
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+  spec:
+    containers:
+    - name: nginx
+      image: nginx
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: nginx-data
+      mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: nginx-data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi 
