@@ -1,0 +1,54 @@
+#ConfigMap
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: app-config
+
+data:
+  APP_ENV: "Development"
+  APP_PORT: "8080"
+  LOG_LEVEL: "Info"
+  APP_NAME: "my-kubernetes-app"
+
+---
+
+#ConfigMap Pod
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: configmap-pod
+
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+
+    env:
+    - name: APP_ENV
+      valueFrom:
+        configMapKeyRef:
+          name: app-config
+          key: APP_ENV
+
+    - name: APP_PORT
+      valueFrom:
+        configMapKeyRef:
+          name: app-config
+          key: APP_PORT
+
+    - name: LOG_LEVEL
+      valueFrom:
+        configMapKeyRef:
+          name: app-config
+          key: LOG_LEVEL
+
+    - name: APP_NAME
+      valueFrom:
+        configMapKeyRef:
+          name: app-config
+          key: APP_NAME
+
+
+---
