@@ -1,13 +1,16 @@
 #intra-pod
 apiVersion: v1
 kind: Pod
+
 metadata:
   name: intra-pod
+
 spec:
   containers:
+
   - name: web
     image: nginx:latest
-  ports:
+    ports:
     - containerPort: 80
 
 
