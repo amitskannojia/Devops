@@ -1,18 +1,26 @@
+#Replication Controller
 apiVersion: v1
 kind: ReplicationController
+
 metadata:
   name: my-rc
+
 spec:
   replicas: 3
+
   selector:
     app: nginx
-templates:
+
+  templates:
   metadata:
     labels:
       app: nginx
+
   spec:
     containers:
     - name: my-con
       image: nginx
-    ports:
-    - containerPort: 80
+      ports:
+      - containerPort: 80
+
+---
