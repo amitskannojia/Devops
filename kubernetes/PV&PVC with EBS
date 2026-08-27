@@ -1,0 +1,39 @@
+#PVC (Dynamic Provisioning) {no need to create PV}
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: my-ebs-pvc
+
+spec:
+  accessModes:
+  -  ReadwriteOnce
+
+storageClassName: ebs-gp3
+
+resources:
+  requests:
+    storage: 5Gi 
+
+---
+
+#PV&PVC Pod File
+apiVersion: v1
+
+kind: pod
+metadata:
+  name: ebs-pod
+
+spec:
+  containers:
+  -  name: nginx
+     image: nginx:latest
+
+     volumeMounts:
+     -  name: ebs-storage
+        mountPath: /data
+
+        volumes:
+        - name: ebs-storage
+          PersistentVolumeClaim:
+            claimName: my-ebs-pvc
