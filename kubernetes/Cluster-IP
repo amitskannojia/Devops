@@ -1,11 +1,13 @@
 #ClusterIP
 apiVersion: v1
 kind: Pod
+
 metadata:
   name: my-pod
   labels:
-    app: my-app
-specs:
+    app: clusterip-app
+
+spec:
   containers:
    -name: con1
     image: nginx
@@ -16,15 +18,18 @@ specs:
 
 apiVersion: v1
 kind: Service
+
 metadata:
-  name: my-svc
+  name: clusterip-svc
+
   specs:
     selector:
-      app: my-app
-    type: ClusterIP
-  ports:
-    -port: 80
-     targetPort:80
+      app: clusterip-app
 
+    type: ClusterIP
+
+    ports:
+    - port: 80
+      targetPort:80
 
 ---
