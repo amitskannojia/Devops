@@ -1,0 +1,30 @@
+#Recreate Strategy
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: nginx-recreate
+
+spec:
+  replicas: 4
+
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels:
+      app: recreate-nginx
+
+  template:
+    metadata:
+      labels:
+        app: recreate-nginx
+
+  spec:
+    containers:
+    - name: nginx
+      image: nginx:1.25
+      ports:
+      - containerPort: 80
+
+---
