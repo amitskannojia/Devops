@@ -1,0 +1,81 @@
+#Providers.tf
+provider "aws" {
+  region = "ap-south-1"
+}
+
+#Variables.tf
+variable "instance_count" {
+  type = number
+  default = 3
+
+}
+
+variable "bucket_names" {
+  type = set(string)
+
+  default = [
+    "terraform-loop-demo-amit-1",
+    "terraform-loop-demo-amit-2",
+    "terraform-loop-demo-amit-3"
+  
+  ]
+
+}
+
+#Main.tf
+#Count
+resource "aws_instance" "web" {
+  count = var.instance_count
+
+  ami = "ami-0f918f7e67a3323f0"
+  instance_type = "t3.micro"
+
+  tags {
+    Name = "web-server-${count.index + 1}"
+
+  }
+
+}
+
+#For_each
+resource "aws_S3_bucket" "demo" {
+  for_each = var.bucket_names
+  bucket = each.value
+
+  tags {
+    Name = "each.value"
+  
+  }
+
+}
+
+#For expression
+locals {
+  instance_names = [
+    for instance in aws_instance.web :
+    instance.tags.Name
+
+  ] 
+
+}
+
+
+#Outputs.tf
+output "instance_ids" {
+  value = var.aws_instance.web[*].id
+
+}
+
+output "instance_names" {
+  value = local.instance_names
+
+}
+
+output "bucket_names" {
+  value = [
+    for bucket in aws_s3_bucket.demo :
+    bucket.bucket
+
+  ]
+
+}
