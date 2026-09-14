@@ -1,0 +1,129 @@
+provider "aws"{
+  region = "ap-south-1"
+
+}
+
+variable "ami_id" {
+  description = AMI ID for ec2
+  type = string
+  ami_id = "ami-0f58b397bc5c1f2e8"
+
+}
+
+variable "instance_type" {
+  description = EC2 instance type
+  type = string
+  instance_type = "t3.micro"
+
+}
+
+#index.html
+<html>
+<head>
+    <title>Terraform Provisioner Lab</title>
+</head>
+
+<body>
+    <h1>Hello from Terraform Provisioner!</h1>
+    <p>This file was copied using Terraform file provisioner.</p>
+</body>
+</html>
+
+
+resource "aws_security_group" "web_sg" {
+  name = "terraform-provisioner-sg"
+
+  ingress {
+    description = "HTTP"
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+ 
+  }
+
+  ingress {
+    description = "SSH"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+
+  }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+}
+
+
+resource "aws_instance" "web" {
+  ami_id = var.ami_id
+  instance_type = var.instance_type
+
+  key_name = "my-key"
+
+  vpc_security_group_ids = ["aws_security_group.web_sg.id"]
+
+  provisioner "file" {
+  source = "index.html"
+  destination = "/tmp/index.html"
+
+  connection {
+    type ="ssh"
+    user = "ubuntu"
+    private_key = file("my-key.pem")
+    host = self.public_ip
+    
+  }
+  
+  }
+
+}
+
+  provisioner "remote-exec" {
+    inline [
+    
+      "sudo apt update -y",
+      "sudo apt install apache2 -y",
+      "cp /tmp/index.html /var/www/html/index.html",
+      "systemctl start apache2",
+      "systemctl enable apache2"
+    
+    ]
+
+    connection {
+      type ="ssh"
+      user = "ubuntu"
+      private_key = file("my-key.pem")
+      host = self.public_ip
+
+    }
+  
+  }
+
+  provisioner "local-exec" {
+    command = echo EC2 created successfully with IP ${self.public_ip} > instance-ip.txt
+
+  }
+
+  tags {
+    Name = "Terraform-Provisioner-Server"
+  
+  }
+
+}
+
+output "instance_public_ip" {
+  value = var.aws_instance.web.public_ip
+
+}
+
+output "website_url" {
+  value = "http://${aws_instance.web.public_ip}"
+
+}
