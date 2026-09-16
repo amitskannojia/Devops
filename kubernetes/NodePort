@@ -7,12 +7,12 @@ metadata:
   labels:
     app: nodeport-app
 
-specs:
+spec:
   containers:
-   -name: con1
-    image: ishika979/super-mario
-    ports:
-    - containerPort: 80
+   - name: con1
+     image: ishika979/super-mario
+     ports:
+     - containerPort: 80
 
 ---
 
