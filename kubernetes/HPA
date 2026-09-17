@@ -17,10 +17,10 @@ spec:
       labels:
         app: hpa-nginx
 
-  spec:
-    containers:
-    - name: hpa-nginx
-      image: nginx:latest
+    spec:
+      containers:
+      - name: hpa-nginx
+        image: nginx:latest
 
       resources:
         requests:
@@ -52,5 +52,4 @@ spec:
   ports:
   - port: 80
     tagetPort: 80
-
 ---
