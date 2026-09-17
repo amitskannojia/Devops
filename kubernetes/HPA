@@ -22,17 +22,17 @@ spec:
       - name: hpa-nginx
         image: nginx:latest
 
-      resources:
-        requests:
-          cpu: 100m
-          memory: 128Mi
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
 
-        limits:
-          cpu: 500m
-          memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
   
-      ports:
-      - containerPort: 80
+        ports:
+        - containerPort: 80
 
 ---
 
